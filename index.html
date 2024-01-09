@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="l-wrapper">
+    <div class="debug">ウィンドウ: <span></span>px</div>
+
+    <div class="l-container">
+      <div class="l-content">
+        <input type="checkbox" name="sidebar" id="sidebar" checked>
+        <aside class="l-sidebar">
+          <h2>Sidebar</h2>
+        </aside>
+        <main class="l-main l-main--<?= $type; ?>" data-width="100px">
+          <div class="grid">
+            <div class="cell">
+              <div class="cell-inner">
+                <div class="cell-img"><img src="/assets/img/profile-1.png" alt=""></div>
+                <div class="cell-content">
+                  <h4>Herbert Bridges</h4>
+                  <p>Birthday: 12/29/2100</p>
+                  <p>Email: tatsuya.kusumoto@colony-i.com</p>
+                  <p>business zero rose lesson pull everybody fun people curve fear rate mostly mood foreign planned sweet ear driving surrounded iron plus ran heat south</p>
+                </div>
+              </div>
+            </div>
+            <div class="cell">
+              <div class="cell-inner">
+                <div class="cell-img"><img src="/assets/img/profile-2.png" alt=""></div>
+                <div class="cell-content">
+                  <h4>Derrick Lawson</h4>
+                  <p>Birthday: 12/20/2040</p>
+                  <p>Email: zef@vurvabu.kz</p>
+                  <p>mountain truck chest measure done clean planet doing contrast easy toy laid hurt know ready type discussion else dozen such worth practice gate fairly</p>
+                </div>
+              </div>
+            </div>
+            <div class="cell">
+              <div class="cell-inner">
+                <div class="cell-img"><img src="/assets/img/profile-3.png" alt=""></div>
+                <div class="cell-content">
+                  <h4>Bobby Wade</h4>
+                  <p>Birthday: 6/7/2080</p>
+                  <p>Email: urolo@leb.cl</p>
+                  <p>farmer phrase apartment plane stood manner deep tip course rabbit twice donkey rain harbor spread alike happen piece dry chart negative dirty drew them</p>
+                </div>
+              </div>
+            </div>
+            <div class="cell">
+              <div class="cell-inner">
+                <div class="cell-img"><img src="/assets/img/profile-4.png" alt=""></div>
+                <div class="cell-content">
+                  <h4>Irene Hudson</h4>
+                  <p>Birthday: 8/20/2054</p>
+                  <p>Email: vazsec@besfi.nu</p>
+                  <p>left exactly fall simplest gravity ago alive expect missing goose become package coffee store decide sea wherever calm floor cause thousand lay deer step</p>
+                </div>
+              </div>
+            </div>
+            <div class="cell">
+              <div class="cell-inner">
+                <div class="cell-img"><img src="/assets/img/profile-5.png" alt=""></div>
+                <div class="cell-content">
+                  <h4>Leah Singleton</h4>
+                  <p>Birthday: 8/20/2054</p>
+                  <p>Email: dirmeci@jeiwo.pe</p>
+                  <p>poem board comfortable front limited rubbed break sale attached needs frighten heading tobacco eight near vapor warm attack friendly officer research remarkable smooth song</p>
+                </div>
+              </div>
+            </div>
+            <div class="cell">
+              <div class="cell-inner">
+                <div class="cell-img"><img src="/assets/img/profile-6.png" alt=""></div>
+                <div class="cell-content">
+                  <h4>Millie French</h4>
+                  <p>Birthday: 8/20/2054</p>
+                  <p>Email: wipvi@hil.ms</p>
+                  <p>size still she greatest invented bright experiment himself jungle explore addition nearest say plan sand twenty just log enter material canal stick modern chemical</p>
+                </div>
+              </div>
+            </div>
+            <div class="cell">
+              <div class="cell-inner">
+                <div class="cell-img"><img src="/assets/img/profile-1.png" alt=""></div>
+                <div class="cell-content">
+                  <h4>Danny Copeland</h4>
+                  <p>Birthday: 8/20/2054</p>
+                  <p>Email: mihjoun@wa.sm</p>
+                  <p>week any tail enemy family sport hardly lake mental flow stepped slipped thank bow being band due push over example contrast region cost person</p>
+                </div>
+              </div>
+            </div>
+            <div class="cell">
+              <div class="cell-inner">
+                <div class="cell-img"><img src="/assets/img/profile-2.png" alt=""></div>
+                <div class="cell-content">
+                  <h4>Sadie Dixon</h4>
+                  <p>taste goes neck handsome meal factory medicine loss slowly said mysterious mix trace fastened announced we thing fair write good tight pen him package</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $debug = document.querySelector('.debug span');
+    const $main = document.querySelector('.l-main');
+    const $checkbox = document.getElementById('sidebar');
+
+    const cellAll = document.querySelectorAll('.cell');
+
+    const setWidth = () => {
+      $debug.textContent = `${window.innerWidth}`;
+      $main.dataset.width = `${$main.clientWidth}px`;
+      cellAll.forEach((cell)=>{
+        cell.dataset.width = `${cell.clientWidth}px`;
+      })
+    };
+    window.addEventListener('load', setWidth);
+    window.addEventListener('resize', setWidth);
+    $checkbox.addEventListener('change', setWidth);
+  </script>
+</body>
+</html>
