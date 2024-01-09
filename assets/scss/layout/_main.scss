@@ -1,0 +1,44 @@
+@use "../foundation" as *;
+
+$_has_layer: true !default;
+@mixin _styles() {
+  .l-main {
+    $this: &;
+    overflow: hidden;
+
+    &--container {
+      position: relative;
+      container-type: inline-size;
+      width: 100%;
+      // &::before {
+      //   content: "";
+      //   display: block;
+      //   width: 100%;
+      //   height: 100%;
+      //   position: absolute;
+      //   top: 0;
+      //   left: 0;
+      //   border: 4px solid orange;
+      //   z-index: 2;
+      // }
+      // &::after {
+      //   content: "container: "attr(data-width);
+      //   position: absolute;
+      //   top: 0;
+      //   right: 0;
+      //   width: fit-content;
+      //   padding: 0.1em 0.75em;
+      //   background-color: #fff;
+      //   border: 2px solid orange;
+      //   border-radius: 4px;
+      // }
+    }
+  }
+}
+@if $_has_layer {
+  @layer layout.main {
+    @include _styles;
+  }
+} @else {
+  @include _styles;
+}

@@ -1,0 +1,24 @@
+@use "../../foundation" as *;
+
+$_has_layer: true !default;
+@mixin _styles() {
+  .c-mv-slider {
+    $this: &;
+
+    .swiper-slide {
+      aspect-ratio: 3 / 1;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
+@if $_has_layer {
+  @layer component.middle {
+    @include _styles;
+  }
+} @else {
+  @include _styles;
+}

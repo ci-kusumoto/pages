@@ -1,0 +1,20 @@
+@use "../foundation" as *;
+
+$_has_layer: true !default;
+@mixin _styles() {
+  .l-wrapper {
+    $this: &;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+  }
+}
+@if $_has_layer {
+  @layer layer.wrapper {
+    @include _styles;
+  }
+} @else {
+  @include _styles;
+}

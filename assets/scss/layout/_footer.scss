@@ -1,0 +1,23 @@
+@use "../foundation" as *;
+
+$_has_layer: true !default;
+@mixin _styles() {
+  .l-footer {
+    $this: &;
+
+    padding: rem(32) 0;
+    background-color: var(--clr--neutral-200);
+
+    &__copyright {
+      text-align: center;
+      font-size: rem(12);
+    }
+  }
+}
+@if $_has_layer {
+  @layer layout.footer {
+    @include _styles;
+  }
+} @else {
+  @include _styles;
+}

@@ -1,0 +1,23 @@
+@use "../../../foundation" as *;
+
+$_has_layer: true !default;
+
+@mixin _styles() {
+  .c-header-main-menu {
+    $this: &;
+
+    &__items {
+      display: flex;
+      align-items: center;
+      gap: csize(24, 48);
+    }
+  }
+}
+
+@if $_has_layer {
+  @layer component.middle {
+    @include _styles;
+  }
+} @else {
+  @include _styles;
+}

@@ -1,0 +1,163 @@
+@use "sass:map";
+@use "sass:list";
+@use "sass:math";
+
+@use "vars";
+@use "maps";
+
+/// ウィンドウ幅が `$ww`pxの時の1pxの数値（$rate）を算出し、フォントサイズ（$pxcel）をかけることで必要なvwを求める。
+///
+/// ウィンドウ幅 1000px(=100vw) の時、 1pxは 0.1vwとなる。
+/// つまり、この時のフォントサイズ10pxは 10px * 0.1vw = 1vw となる
+///
+/// @example
+/// font-size: clamp(10px, #{px2vw(18, 1440)}, 24px);
+/// //font-size: clamp(10px, 1.25vw, 24px);
+///
+/// @param {number} $pxcel デザイン上のフォントサイズ（単位：px）
+/// @param {number} $ww デザイン上のページの横幅（window width）（単位：px | デフォルト：1440）
+/// @return {number} ウィンドウ幅が `$ww`px の時点で、 `$pxcel`px になるvwの値を返す。
+/// @author Tatsuya Kusumoto
+///
+@function px2vw($pxcel, $ww: 1440) {
+  $rate: math.div(100, $ww);
+  @return $rate * $pxcel * 1vw;
+}
+
+/// pxをremに変換
+/// @param {number} $px 変換したいピクセル値
+/// @param {number} $root ベースとなるフォントサイズ（デフォルト：16）
+/// @return {number} remに変換された値
+@function px2rem($px, $root: 16) {
+  @return #{math.div($px, $root)}rem;
+}
+
+@function em($px, $fz: 16) {
+  @return #{math.div($px, $fz)}em;
+}
+
+@function rem($px, $fz: 16) {
+  @return #{math.div($px, $fz)}rem;
+}
+
+/// 指定した数値から単位を除去して返す。
+///
+/// @param {number} $number 単位付きの数値
+/// @return {number} 単位の付いていない数値
+/// @example
+/// unit-remove(1.4rem);
+/// // 1.4
+/// @author Tatsuya Kusumoto
+///
+@function unit-remove($number) {
+  @if not type-of($number) == number {
+    @warn '#{ $number } is not a number.';
+    @return $number;
+  }
+  @return math.div($number, ($number * 0 + 1));
+}
+
+// SP時のコンテンツ - ウィンドウ間の余白の値を返す
+//
+@function inner-gap($mode: active) {
+  $minmax: null;
+
+  @if $mode == negative {
+    $minmax: min(
+      calc(var(--content-min-margin, 24) * -1px),
+      calc(var(--content-base-margin, 40) / var(--content-base-width, 1440) * -100vw)
+    );
+  } @else {
+    $minmax: max(
+      calc(var(--content-min-margin, 24) * 1px),
+      calc(var(--content-base-margin, 40) / var(--content-base-width, 1440) * 100vw)
+    );
+  }
+
+  @return $minmax;
+}
+
+/// 等差数列（Arithmetic Progression）を出力する
+///
+/// @param {number} $min 等差数列の最小値
+/// @param {number} $max 等差数列の最大値
+/// @param {number} $step 等差数列の公差（増加数）
+///
+/// @example
+///   $list: AP(2, 10, 2);
+///   // 2 4 6 8 10
+@function AP($min, $max, $step: 1) {
+  $list: ();
+  $i: $min;
+  @while $i <= $max {
+    $val: $i;
+    $list: list.append($list, $val);
+    $i: $i + $step;
+  }
+  @return $list;
+}
+
+/// clampを使ったfont-sizeの出力
+/// @param {number} $sp SP時（最小値）のフォントサイズ。pxの数値のみ
+/// @param {number} $pc PC時（最大値）のフォントサイズ。pxの数値のみ
+/// @param {number} $ww px2vwの基準となるウィンドウ幅。デフォルトは1440
+///
+/// @example
+///   font-size: cfz(20, 32);
+///   // font-size: clamp(var(--fz20), 2.2222222222vw, var(--fz32));
+///   //
+///   // ウィンドウ幅1440pxの時、32pxになるサイズ感で
+///   // 最大値：32、最小値：20のフォントサイズ値が出力される
+@function cfz($sp, $pc, $ww: 1440) {
+  @return clamp(var(--fz#{$sp}, #{math.div($sp, 16)}em), #{px2vw($pc, $ww)}, var(--fz#{$pc}, #{math.div($pc, 16)}em));
+}
+
+@function csize($sp, $pc, $fz: 16, $ext: em) {
+  $min: "";
+  $max: "";
+  @if $ext == "em" or $ext == "rem" {
+    $min: #{math.div($sp, $fz) + $ext};
+    $max: #{math.div($pc, $fz) + $ext};
+  } @else {
+    $min: #{$sp + $ext};
+    $max: #{$pc + $ext};
+  }
+
+  @return clamp(#{$min}, #{px2vw($pc)}, #{$max});
+}
+
+/// font-sizeとline-heightによる文字上下のスペースを考慮したマージンの計算
+/// @param {number} $margin デザイン上のマージン数(px)
+/// @param {list} $this マージンを当てたい要素の (font-size , line-height)
+/// @param {number} $siblings 兄弟要素の (font-size , line-height)
+///
+/// @example
+///   margin-top: computed-margin(40, (16, 1.8), (40, 1.4));
+///   // margin-top: 25.6px;
+///   //
+///   // font-size: 16px; line-height: gwlh(1.8); のテキストと
+///   // font-size: 40px; line-height: gwlh(1.4); のテキスト間の余白が
+///   // 40pxの高さになる数値を返す
+@function computed-margin($margin, $this: (0, 0), $siblings: (0, 0)) {
+  $this-fz: nth($this, 1);
+  $this-lh: nth($this, 2);
+  $this-space: calc(($this-fz * $this-lh - $this-fz) / 2);
+
+  $siblings-fz: nth($siblings, 1);
+  $siblings-lh: nth($siblings, 2);
+  $siblings-space: calc(($siblings-fz * $siblings-lh - $siblings-fz) / 2);
+
+  @return #{$margin - $this-space - $siblings-space}px;
+}
+
+@function gwlh($num, $lang: en) {
+  $result: $num;
+  @if $lang != "ja" {
+    @if $num >= 2 {
+      $result: 1.7;
+    } @else {
+      $result: max($num - 0.2, 1.1);
+    }
+  }
+  @return $result;
+}

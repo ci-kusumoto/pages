@@ -1,0 +1,35 @@
+@use "../foundation" as *;
+
+@use "../object/component/header/header-main-menu";
+
+$_has_layer: true !default;
+
+@mixin _styles() {
+  .l-header {
+    $this: &;
+
+    display: flex;
+    align-items: center;
+    height: var(--header-height);
+
+    &__inner {
+      @include content-align(1200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__logo {
+      font-size: rem(32);
+      font-weight: bold;
+    }
+  }
+}
+
+@if $_has_layer {
+  @layer layout.header {
+    @include _styles;
+  }
+} @else {
+  @include _styles;
+}

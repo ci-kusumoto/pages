@@ -1,0 +1,383 @@
+@use "sass:math";
+@use "sass:list";
+@use "sass:map";
+@use "sass:string";
+
+@use "vars";
+@use "maps";
+@use "functions" as *;
+
+// ========================================
+/// 汎用的なコンテナ。
+/// デザイン上の数値を入力すると、いい感じのコンテナを生成してくれる。
+///
+///
+/// @param {number} $maw 設定したいmax-widthの値をpxの数値のみで指定（デフォルト：100%）
+/// @param {number|list} $margin デザイン上のマージンのpx値をNumberかListで指定。（デフォルト：80）
+/// @param {string} $align center, left, right のいずれかを指定すると配置を変更できる
+/// @param {number} $base 基準となる幅を指定。（デフォルト：1440）
+/// @example
+///   inner(100%, 80, center)
+///   // ウィンドウ幅が1440pxの時に、80pxになるマージンを左右に持ったコンテナが生成される。
+///   // 左右のマージンは最小値20px。max-widthは100%
+///
+///   inner(1040, (40,100), left, 1280)
+///   // ウィンドウ幅が1280pxの時に、100pxになるマージンを右だけに持った（左寄せの）コンテナが生成される。
+///   // 左マージンは0、右マージンは最小値40px。max-widthは1040px。
+@mixin inner($maw: 100%, $margin: 40, $align: center, $base: 1440) {
+  $min_margin: 12;
+  $max_margin: $margin;
+  @if type-of($margin) == list {
+    $min_margin: min(list.nth($margin, 1), list.nth($margin, 2));
+    $max_margin: max(list.nth($margin, 1), list.nth($margin, 2));
+  }
+  $subtrahend: max(var(--min, #{$min_margin}px), #{px2vw($max_margin, $base)});
+
+  @if $align == center {
+    $subtrahend: calc($subtrahend * 2);
+  }
+  @if $maw != 100% and type-of($maw) == "number" {
+    $maw: #{$maw}px;
+  }
+
+  width: calc(100% - $subtrahend);
+  max-width: var(--maw, $maw);
+
+  @if $align == left {
+    margin-left: 0;
+    margin-right: auto;
+  } @else if $align == right {
+    margin-left: auto;
+    margin-right: 0;
+  } @else if $align == center {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@mixin content-align($maw: 100%, $align: center) {
+  --minmax: max(calc(var(--content-min-margin, 24) * 1px), calc(var(--content-base-margin, 40) / var(--content-base-width, 1440) * 100vw));
+
+  @if $maw != 100% {
+    $maw: #{$maw}px;
+  }
+
+  max-width: var(--content-max-width, $maw);
+  @if $align == left {
+    margin-left: 0;
+    margin-right: auto;
+    width: calc(100% - (var(--minmax)));
+  } @else if $align == right {
+    margin-left: auto;
+    margin-right: 0;
+    width: calc(100% - (var(--minmax)));
+  } @else if $align == center {
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - (var(--minmax) * 2));
+  }
+}
+
+@mixin inner-padding($align: center) {
+  --minmax: max(calc(var(--content-min-margin, 24) * 1px), calc(var(--content-base-margin, 40) / var(--content-base-width, 1440) * 100vw));
+
+  @if $align == center or $align == left {
+    padding-right: var(--minmax);
+  }
+  @if $align == center or $align == right {
+    padding-left: var(--minmax);
+  }
+
+}
+
+
+/// Cssで矢印（ > ）を書き出す。
+/// 基本的には `::before` `::after` 内で呼び出す。
+///
+/// 呼び出すと、上と右にだけボーダーが引かれた四角形が現れる。
+/// 位置調整や傾き調整は呼び出した側で適宜行う。
+///
+/// カスタム変数でスタイルを当てているので、呼び出し側でカスタム変数を上書きできる。
+///
+/// @param {number} $size 表示したい四角形のサイズ。
+/// @param {color} $color 上と右に表示するボーダーの色
+/// @param {number} $bdw 線の太さ
+@mixin stroke-arrow($size: 8, $color: #000, $bdw: 1) {
+  --size: #{$size}px;
+  --bdw: #{$bdw}px;
+  --clr: #{$color};
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  border-top: var(--bdw) solid var(--clr);
+  border-right: var(--bdw) solid var(--clr);
+  transition-property: border-color;
+  transition-duration: vars.$DURATION__DEFAULT;
+  transition-timing-function: vars.$easeOutCubic;
+  transition-delay: 0s;
+}
+
+/// Cssで矢印（ ▼ ）を書き出す。
+/// 基本的には `::before` `::after` 内で呼び出す。
+///
+/// 呼び出すと、底辺：$width(px)、高さ：$height(px)の下向きの三角形ができる。
+/// 位置調整や傾き調整は呼び出した側で適宜行う。
+///
+/// カスタム変数でスタイルを当てているので、呼び出し側でカスタム変数を上書きできる。
+///
+/// @param {number} $width 表示したい三角形の底辺の長さ（px）。
+/// @param {number} $height 表示したい三角形の高さ（px）。
+/// @param {color} $color 三角形の色。
+@mixin fill-arrow($width: 8, $height: 6, $color: #000) {
+  --w: #{$width}px;
+  --h: #{$height}px;
+  --base: calc(#{math.div(var(--w), 2)});
+  --clr: #{$color};
+  display: block;
+  width: 0;
+  height: 0;
+  border-width: var(--h) var(--base) 0 var(--base);
+  border-style: solid;
+  border-color: var(--clr) transparent transparent transparent;
+  transition-property: border-color;
+  transition-duration: vars.$DURATION__DEFAULT;
+  transition-timing-function: vars.$easeOutCubic;
+  transition-delay: 0s;
+}
+
+/// 要素の均等配置
+/// 基本的に、親要素に display:flex が指定されていることが前提になっている。
+///
+/// @param {number} $split 要素の分割数。
+/// @param {number} $margin 要素間の左右マージン（px）。
+/// @param {number} $type betweenかaroundかを指定。flexのjustify-contentのイメージ。（省略可能）
+@mixin justify-width($split: 4, $margin: 20, $type: between) {
+  $elm_width: 0;
+
+  @if $type == between {
+    $margin_sum: $margin * ($split - 1);
+    $elm_width: calc((100 / #{$split} * 1%) - #{math.div($margin_sum, $split)}px);
+    margin-right: #{$margin}px;
+    &:nth-child(#{$split}n + #{$split}) {
+      margin-right: 0;
+    }
+  }
+  @if $type == around {
+    $margin_sum: $margin * ($split + 1);
+    $elm_width: calc((100 / #{$split} * 1%) - #{math.div($margin_sum, $split)}px);
+    margin-left: #{$margin}px;
+    &:nth-child(#{$split}n + #{$split}) {
+      margin-right: #{$margin}px;
+    }
+  }
+  width: $elm_width;
+}
+
+// aタグのafterをクリッカブルにするやつ
+@mixin link-screen {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+// 文字列にラインマーカーみたいなのを引きたい時に使うやつ
+//
+// @param {color} $clr 引きたい線の色
+// @param {number} $size 引きたい線のサイズ。基本的にはpxで設定
+@mixin line-marker($clr: #000, $size: 2px) {
+  display: inline-block;
+  background-image: linear-gradient(to top, $clr $size, transparent $size, transparent 100%);
+  background-repeat: no-repeat;
+}
+
+/// pxで数値を指定すると、emに単位変換してメディアクエリを書き出す。
+///
+/// @param {number} $min min-widthの値
+/// @param {number} $max max-widthの値
+/// @example
+///   .sample {
+///     content: "Default";
+///     @include ms(768) {
+///       content: "768pxより上";
+///     }
+///   }
+///   // .sample {
+///   //   content: "Default";
+///   // }
+///   // @media (min-width: 48.0625em) {
+///   //   .sample {
+///   //     content: "768pxより上";
+///   //   }
+///   // }
+@mixin ms($min: vars.$BP2, $max: false) {
+  $min_em: #{math.div($min + 1, 16)}em;
+  @if $max == false {
+    @media (min-width: $min_em) {
+      @content;
+    }
+  } @else {
+    $max_em: #{math.div($max, 16)}em;
+    @if $min > 0 {
+      @media (min-width: $min_em) and (max-width: $max_em) {
+        @content;
+      }
+    } @else {
+      @media (max-width: $max_em) {
+        @content;
+      }
+    }
+  }
+}
+
+/// `min-width`とか`max-width`とかだとわかりにくいので、`@media` をわかりやすく指定できるようにする
+///
+/// 引数に反映させたいパターンを文字列で入力する
+/// @param {string} $type pc|tb|sp|!pc|!sp のいずれか
+/// @example
+///   $BP1: 576;
+///   $BP2: 992;
+///   .sample {
+///     content: "Default";
+///     @include mq("sp") {
+///       content: quote(#{$BP1}px以下);
+///     }
+///     @include mq("!pc") {
+///       content: quote(#{$BP2}px以下);
+///     }
+///     @include mq("tb") {
+///       content: quote(#{$BP1}pxより上かつ#{$BP2}px以下);
+///     }
+///     @include mq("!sp") {
+///       content: quote(#{$BP1}pxより上);
+///     }
+///     @include mq("pc") {
+///       content: quote(#{$BP2}pxより上);
+///     }
+///   }
+///   // .sample {
+///   //   content: "Default";
+///   // }
+///   // @media (max-width: 36em) {
+///   //   .sample {
+///   //     content: "576px以下";
+///   //   }
+///   // }
+///   // @media (max-width: 62em) {
+///   //   .sample {
+///   //     content: "992px以下";
+///   //   }
+///   // }
+///   // @media (min-width: 36.0625em) and (max-width: 62em) {
+///   //   .sample {
+///   //     content: "576pxより上かつ992px以下";
+///   //   }
+///   // }
+///   // @media (min-width: 36.0625em) {
+///   //   .sample {
+///   //     content: "576pxより上";
+///   //   }
+///   // }
+///   // @media (min-width: 62.0625em) {
+///   //   .sample {
+///   //     content: "992pxより上";
+///   //   }
+///   // }
+/// @require {mixin} ms
+@mixin mq($type: "!sp") {
+  @if $type == "pc" {
+    @include ms(vars.$BP2) {
+      @content;
+    }
+  } @else if $type == "!sp" {
+    @include ms(vars.$BP1) {
+      @content;
+    }
+  } @else if $type == "tb" {
+    @include ms(vars.$BP1, vars.$BP2) {
+      @content;
+    }
+  } @else if $type == "!pc" {
+    @include ms(0, vars.$BP2) {
+      @content;
+    }
+  } @else if $type == "sp" {
+    @include ms(0, vars.$BP1) {
+      @content;
+    }
+  } @else {
+    @if type-of($type) == number {
+      @include ms($type) {
+        @content;
+      }
+    } @else if type-of($type) == list {
+      @include ms(list.nth($type, 1), list.nth($type, 2)) {
+        @content;
+      }
+    }
+  }
+}
+
+/// フォントサイズ指定用のカスタム変数を出力する
+///
+/// pxをremに変換した値が、カスタム変数に代入されて出力される
+/// @param {number} $min 開始のフォントサイズ
+/// @param {number} $max 終了のフォントサイズ
+/// @param {number} $step 増加の間隔
+/// @example
+///   :root {
+///     @include fz-custom-vars(8,16);
+///     @include fz-custom-vars(18,28,2);
+///   }
+///   // :root {
+///   //   --fz8: 0.5rem;
+///   //   --fz9: 0.5625rem;
+///   //   --fz10: 0.625rem;
+///   //   --fz11: 0.6875rem;
+///   //   --fz12: 0.75rem;
+///   //   --fz13: 0.8125rem;
+///   //   --fz14: 0.875rem;
+///   //   --fz15: 0.9375rem;
+///   //   --fz16: 1rem;
+///   //   --fz18: 1.125rem;
+///   //   --fz20: 1.25rem;
+///   //   --fz22: 1.375rem;
+///   //   --fz24: 1.5rem;
+///   //   --fz26: 1.625rem;
+///   //   --fz28: 1.75rem;
+///   // }
+/// @example
+///   // 生成されたカスタム変数は以下のように使う
+///   font-size: var(--fz16);
+@mixin fz-custom-vars($min: 8, $max: 60, $step: 1) {
+  $i: $min;
+  @while $i <= $max {
+    $key: "--fz" + $i;
+    #{$key}: #{math.div($i, 16)}em;
+    $i: $i + $step;
+  }
+}
+
+@mixin minus-margin(
+  $type: both,
+  $minmax: (
+    12,
+    40
+  )
+) {
+  $min: list.nth($minmax, 1);
+  $max: list.nth($minmax, 2);
+  @if $type == left or $type == both {
+    margin-left: min(#{rem($min * -1)}, #{px2vw($max * -1)});
+    padding-left: max(#{rem($min)}, #{px2vw($max)});
+  }
+
+  @if $type == right or $type == both {
+    margin-right: min(#{rem($min * -1)}, #{px2vw($max * -1)});
+    padding-right: max(#{rem($min)}, #{px2vw($max)});
+  }
+}

@@ -1,0 +1,15 @@
+@use "../scss/foundation" as *;
+
+@use "../scss/foundation/html5reset";
+@use "../scss/foundation/base";
+
+@use "../scss/layout/wrapper";
+@use "../scss/layout/content";
+@use "../scss/layout/main";
+@use "../scss/layout/sidebar";
+@use "../scss/layout/header";
+@use "../scss/layout/footer";
+
+@use "../scss/object/component/mv-slider";
+
+@import url("/wp-content/themes/NewTheme/assets/js/plugin/swiper/swiper-bundle.min.css") layer(foundation.plugin);

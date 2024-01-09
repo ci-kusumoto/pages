@@ -1,0 +1,32 @@
+@use "../foundation" as *;
+
+$_has_layer: true !default;
+@mixin _styles() {
+  #sidebar {
+    position: absolute;
+    z-index: 9999;
+    display: none;
+  }
+  .l-sidebar {
+    $this: &;
+
+    display: none;
+    width: csize(180, 280);
+    flex-shrink: 0;
+    background-color: #f0f0f0;
+    padding: 2em;
+
+    @media (min-width: 481px) {
+      #sidebar:checked + & {
+        display: block;
+      }
+    }
+  }
+}
+@if $_has_layer {
+  @layer layout.sidebar {
+    @include _styles;
+  }
+} @else {
+  @include _styles;
+}

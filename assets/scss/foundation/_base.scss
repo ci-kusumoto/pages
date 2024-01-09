@@ -1,0 +1,346 @@
+@use "sass:color";
+@use "../foundation" as *;
+
+@layer foundation, layout, component, project, utility;
+
+@layer foundation {
+  @layer reset, base;
+}
+@layer layout {
+  @layer container, header, footer;
+}
+@layer component {
+  @layer low, middle, high;
+}
+
+$_has_layer: true !default;
+
+@mixin _styles() {
+  :root {
+    @each $type, $map in $clr {
+      @each $key, $val in $map {
+        --clr--#{$type}-#{$key}: #{$val};
+        --clr--#{$type}-#{$key}-rgb: #{color.red($val)}
+          #{color.green($val)}
+          #{color.blue($val)};
+        @if color.lightness($val) > 50 {
+          --clr--#{$type}-#{$key}-contrast: #000;
+        } @else {
+          --clr--#{$type}-#{$key}-contrast: #fff;
+        }
+      }
+    }
+
+    // __________GENERAL
+    --general--anchor-offset: var(--fixed-header-height);
+
+    --content-min-margin: 24;
+    --content-base-margin: 40;
+    --content-base-width: 1440;
+
+    // __________COLORS
+    --clr--base: var(--clr--neutral-400);
+    --clr--text-default: var(--clr--neutral-900);
+    --clr--text-black: var(--clr--neutral-950);
+
+    // __________FONT SIZE
+    @include fz-custom-vars(8, 21);
+    @include fz-custom-vars(22, 28, 2);
+    @include fz-custom-vars(32, 64, 4);
+    @include fz-custom-vars(72, 120, 8);
+
+    --ff--gothic: "Helvetica Neue", "Helvetica", "Hiragino Sans",
+      "Hiragino Kaku Gothic ProN", "Arial", "Yu Gothic", "Meiryo", sans-serif;
+    --ff--mincho: "Times New Roman", "YuMincho", "Hiragino Mincho ProN",
+      "Yu Mincho", "MS PMincho", serif;
+
+    // __________HEADER
+    --header-height: 72px;
+    --fixed-header-height: 50px;
+    @include mq("pc") {
+      --header-height: 120px;
+      --fixed-header-height: 70px;
+    }
+  }
+
+  body {
+    font-size: 16px;
+    font-family: var(--ff--gothic);
+    line-height: 1.6;
+    color: #000;
+    background-color: #fff;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeSpeed;
+    font-size: rem(16);
+    position: relative;
+  }
+
+  img {
+    vertical-align: middle;
+    &:not([width]) {
+      width: 100%;
+    }
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  h1 {
+    line-height: 1.2;
+  }
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.4;
+  }
+  ol,
+  ul {
+    padding-left: 0;
+    list-style: none;
+    &::before,
+    &::after {
+      content: unset;
+    }
+  }
+  li {
+    list-style: none;
+  }
+  a {
+    color: currentColor;
+    text-decoration: none;
+    fill: currentColor;
+    svg {
+      fill: currentColor;
+    }
+    &:hover,
+    &:visited,
+    &:link {
+      color: currentColor;
+      text-decoration: none;
+    }
+  }
+
+  :where(input, select, button, textarea) {
+    font: inherit;
+  }
+  :where(
+      input[type="checkbox"],
+      input[type="radio"],
+      select,
+      button,
+      input[type="button"],
+      input[type="submit"]
+    ) {
+    cursor: pointer;
+  }
+  :where(img, iframe) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  :where(input[type="checkbox"]) {
+    opacity: unset;
+    display: inline-block;
+
+    &::before {
+      display: none;
+    }
+    & + label {
+      &::before {
+        display: none;
+      }
+    }
+  }
+  select {
+    background: unset;
+    border: unset;
+    padding: unset;
+    margin: unset;
+  }
+
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  menu,
+  nav,
+  section,
+  div,
+  address,
+  iframe,
+  canvas,
+  hr,
+  textarea,
+  main {
+    line-height: inherit;
+  }
+}
+
+@if $_has_layer {
+  @layer foundation.base {
+    @include _styles;
+  }
+} @else {
+  @include _styles;
+}
+
+h1 {
+  font-size: 1.5em;
+  padding: 1em;
+  &::before {
+    content: "デフォルトでは1.5em";
+  }
+}
+
+@media screen and (min-width: 768px) {
+  h1 {
+    font-size: 2em;
+    &::before {
+      content: "ウィンドウサイズが768px以上の場合2em";
+    }
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1em;
+  padding: 2em;
+}
+
+.cell {
+  border: 1px solid #d9d9d9;
+}
+
+.cell-inner {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1em;
+}
+
+.cell-img {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  height: auto;
+  flex-shrink: 0;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.cell-content {
+  h4 {
+    font-size: 1.15em;
+  }
+  > *:not(:first-child) {
+    margin-top: 0.5em;
+  }
+}
+
+.debug {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  font-size: 1.5em;
+  color: #fff;
+  width: min(80%, 400px);
+  background-color: rgba(#000, 0.6);
+  border-radius: 8px;
+  box-shadow: 0 0 2px rgba(#000, 0.4);
+  padding: 0.25em 0.5em;
+  text-align: center;
+  z-index: 2;
+  margin: auto;
+  backdrop-filter: blur(2px);
+}
+
+.l-main--media {
+  @media (min-width: 481px) {
+    .cell-inner {
+      flex-direction: row;
+    }
+    .cell-img {
+      aspect-ratio: 1 / 1;
+      width: max(25%, 110px);
+      height: auto;
+      flex-shrink: 0;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+  @media (min-width: 769px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+.l-main--container {
+  .cell {
+    container-type: inline-size;
+    position: relative;
+    &::before {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 4px solid purple;
+      z-index: 2;
+    }
+    &::after {
+      content: "container: " attr(data-width);
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: fit-content;
+      padding: 0.1em 0.75em;
+      background-color: #fff;
+      border: 2px solid purple;
+      border-radius: 4px;
+      z-index: 1;
+    }
+  }
+
+  @container (min-width: 769px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @container (min-width: 370px) {
+    .cell-inner {
+      flex-direction: row;
+    }
+    .cell-img {
+      aspect-ratio: 1 / 1;
+      width: max(25%, 110px);
+      height: auto;
+      flex-shrink: 0;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
