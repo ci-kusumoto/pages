@@ -608,7 +608,7 @@ h1::before {
   #sidebar {
     position: absolute;
     z-index: 9999;
-    display: none;
+    /* display: none; */
   }
   .l-sidebar {
     display: none;
