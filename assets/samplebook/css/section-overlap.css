@@ -1,0 +1,130 @@
+.l-main {
+  background-color: rgba(0, 0, 0, 0.4);
+  min-height: 100vh;
+}
+
+.js-sol {
+  position: relative;
+  min-height: 100vh;
+}
+.js-sol:first-child .js-sol-wrapper {
+  position: fixed;
+}
+.js-sol-wrapper {
+  position: relative;
+  width: 100%;
+  top: 0;
+}
+.js-sol-wrapper > * {
+  position: relative;
+  z-index: 1;
+}
+.js-sol-wrapper.is-fixed-start {
+  position: fixed;
+}
+.js-sol-item {
+  position: relative;
+  background-color: #fafafa;
+  -webkit-transform: translate3d(0, var(--margin, 0), 0);
+          transform: translate3d(0, var(--margin, 0), 0);
+  width: 100%;
+}
+.js-sol-item img {
+  width: 100%;
+}
+.js-sol-item:nth-child(2n) {
+  background-color: #999;
+}
+.js-sol-item > * {
+  -webkit-transform: scale(calc(1 - var(--hide-progress, 0) * 0.05));
+          transform: scale(calc(1 - var(--hide-progress, 0) * 0.05));
+  opacity: calc(1 - var(--hide-progress, 0));
+}
+.js-sol-item::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 10px;
+  background-color: #f00;
+  top: 0;
+  left: 0;
+  position: absolute;
+  z-index: 10;
+}
+.js-sol-item::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 10px;
+  background-color: #00f;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  z-index: 10;
+}
+@media (max-width: 62em) {
+  .js-sol-item[class*=-escape] {
+    background-color: #fff;
+  }
+}
+@media (max-width: 62em) {
+  .js-sol-item[data-ignore=sp] {
+    display: contents;
+  }
+}
+@media (min-width: 62.0625em) {
+  .js-sol-item[data-ignore=pc] {
+    display: contents;
+  }
+}
+.js-sol-fadeout {
+  background-color: #fff;
+}
+@media (min-width: 62.0625em) {
+  .js-sol-fadeout::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    z-index: 1;
+  }
+  .js-sol-fadeout > * {
+    position: relative;
+    z-index: 2;
+    opacity: calc(1 - var(--hide-progress) * 1.5);
+  }
+}
+@media (max-width: 62em) {
+  .js-sol-fadein {
+    background-color: #fff;
+  }
+}
+@media (min-width: 62.0625em) {
+  .js-sol-fadein::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: calc(100vh + 200%);
+    position: absolute;
+    bottom: -100%;
+    left: 0;
+    background-color: #fff;
+    z-index: 1;
+    opacity: calc(var(--in-progress) * 1.5);
+  }
+  .js-sol-fadein > * {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+.footer {
+  position: relative;
+  height: 500px;
+  background-color: #333;
+  z-index: 5;
+}/*# sourceMappingURL=section-overlap.css.map */

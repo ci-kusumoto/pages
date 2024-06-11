@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@import url("/wp-content/themes/NewTheme/assets/js/plugin/swiper/swiper-bundle.min.css") layer(foundation.plugin);
 /*
 html5doctor.com Reset Stylesheet
 v1.6.1
@@ -608,7 +607,7 @@ h1::before {
   #sidebar {
     position: absolute;
     z-index: 9999;
-    /* display: none; */
+    display: none;
   }
   .l-sidebar {
     display: none;

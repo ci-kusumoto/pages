@@ -1,0 +1,94 @@
+@use "../../scss/foundation" as *;
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeSpeed;
+  font-feature-settings: "palt";
+  font-feature-settings: "pwid";
+  font-feature-settings: "pkna";
+}
+
+.houganshi {
+  $this: &;
+
+  p {
+    line-height: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1lh calc((100vw - 40ic) / 2);
+    letter-spacing: 0.04em;
+    background-image: repeating-linear-gradient(
+      to top,
+      #a0c19f,
+      #a0c19f 1px,
+      transparent 1px,
+      transparent 1lh
+    );
+  }
+  &:has(input[type="checkbox"]:checked) {
+    p {
+      background-image: repeating-linear-gradient(
+          to right,
+          #a0c19f,
+          #a0c19f 1px,
+          transparent 1px,
+          transparent 1lh
+        ),
+        repeating-linear-gradient(
+          to top,
+          #a0c19f,
+          #a0c19f 1px,
+          transparent 1px,
+          transparent 1lh
+        );
+    }
+  }
+}
+
+.typography {
+  $this: &;
+
+  padding: 40px 0;
+  p {
+    --clr: #a0c19f;
+    --size: 1px;
+    font-size: 2em;
+    font-family: Helvetica, sans-serif;
+    position: relative;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    padding: 0 calc((100vw - 40ch) / 2);
+    margin-left: auto;
+    margin-right: auto;
+    background-image: repeating-linear-gradient(
+      transparent,
+      transparent calc(((1lh - 1cap) / 2) + 1cap),
+      var(--clr, currentColor) calc(((1lh - 1cap) / 2) + 1cap),
+      var(--clr, currentColor)
+        calc((((1lh - 1cap) / 2) + 1cap) + var(--size, 1px)),
+      transparent calc((((1lh - 1cap) / 2) + 1cap) + var(--size, 1px)),
+      transparent 1lh
+    );
+    // background-image: repeating-linear-gradient(
+    //   transparent,
+    //   transparent calc((1lh - 1cap) / 2),
+    //   rgba(#000, 1) calc((1lh - 1cap) / 2),
+    //   rgba(#000, 1) calc(((1lh - 1cap) / 2) + 5px),
+    //   transparent calc(((1lh - 1cap) / 2) + 5px),
+    //   transparent calc(((1lh - 1cap) / 2) + 1cap),
+    //   rgba(#000, 1) calc(((1lh - 1cap) / 2) + 1cap),
+    //   rgba(#000, 1) calc(((1lh - 1cap) / 2) + 1cap + 5px),
+    //   transparent calc(((1lh - 1cap) / 2) + 1cap + 5px),
+    //   transparent 1lh
+    // );
+    // &::before {
+    //   content: "";
+    //   width: 1lh;
+    //   height: 1cap;
+    //   display: block;
+    //   background-color: rgba(#000, 0.1);
+    //   position: absolute;
+    // }
+  }
+}
