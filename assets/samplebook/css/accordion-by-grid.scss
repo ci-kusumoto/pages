@@ -1,0 +1,68 @@
+@use "../../scss/foundation" as *;
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeSpeed;
+  font-feature-settings: "palt";
+  font-feature-settings: "pwid";
+  font-feature-settings: "pkna";
+
+  padding: 40px;
+}
+
+/* コア */
+.js-accordion {
+  $this: &;
+
+  &-item {
+    &.is-open {
+      #{$this}-body {
+        grid-template-rows: 1fr;
+      }
+    }
+  }
+
+  &-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease-in-out 0s;
+  }
+
+  &-content {
+    overflow: hidden;
+  }
+}
+
+/* 装飾用 */
+.js-accordion {
+  $this: &;
+
+  &-item {
+    padding-block: 24px;
+    & + & {
+      border-top: 1px solid #ccc;
+    }
+
+  }
+
+  &-trigger {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    width: 100%;
+    text-align: left;
+  }
+
+  &-body {
+  }
+
+  &-content {
+    > *:first-child {
+      padding-top: 20px;
+    }
+  }
+}

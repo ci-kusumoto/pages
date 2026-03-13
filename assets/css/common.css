@@ -318,8 +318,7 @@ Twitter: @rich_clark
   *,
   *::before,
   *::after {
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
+    box-sizing: border-box;
   }
   h1 {
     line-height: 1.2;
@@ -436,16 +435,9 @@ h1::before {
 
 .cell-inner {
   padding: 1em;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: start;
-      -ms-flex-align: start;
-          align-items: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 1em;
 }
 
@@ -453,8 +445,7 @@ h1::before {
   aspect-ratio: 16/9;
   width: 100%;
   height: auto;
-  -ms-flex-negative: 0;
-      flex-shrink: 0;
+  flex-shrink: 0;
 }
 .cell-img img {
   width: 100%;
@@ -480,29 +471,23 @@ h1::before {
   width: min(80%, 400px);
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 8px;
-  -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-          box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
   padding: 0.25em 0.5em;
   text-align: center;
   z-index: 2;
   margin: auto;
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
 }
 
 @media (min-width: 481px) {
   .l-main--media .cell-inner {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    flex-direction: row;
   }
   .l-main--media .cell-img {
     aspect-ratio: 1/1;
     width: max(25%, 110px);
     height: auto;
-    -ms-flex-negative: 0;
-        flex-shrink: 0;
+    flex-shrink: 0;
   }
   .l-main--media .cell-img img {
     width: 100%;
@@ -537,7 +522,6 @@ h1::before {
   position: absolute;
   top: 0;
   right: 0;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   padding: 0.1em 0.75em;
@@ -553,17 +537,13 @@ h1::before {
 }
 @container (min-width: 370px) {
   .l-main--container .cell-inner {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    flex-direction: row;
   }
   .l-main--container .cell-img {
     aspect-ratio: 1/1;
     width: max(25%, 110px);
     height: auto;
-    -ms-flex-negative: 0;
-        flex-shrink: 0;
+    flex-shrink: 0;
   }
   .l-main--container .cell-img img {
     width: 100%;
@@ -584,12 +564,8 @@ h1::before {
 @layer layout.content {
   .l-content:has(.l-sidebar) {
     position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: stretch;
-        -ms-flex-align: stretch;
-            align-items: stretch;
+    align-items: stretch;
     gap: clamp(1.5em, 2.7777777778vw, 2.5em) 0;
   }
 }
@@ -612,8 +588,7 @@ h1::before {
   .l-sidebar {
     display: none;
     width: clamp(11.25em, 19.4444444444vw, 17.5em);
-    -ms-flex-negative: 0;
-        flex-shrink: 0;
+    flex-shrink: 0;
     background-color: #f0f0f0;
     padding: 2em;
   }
@@ -625,23 +600,15 @@ h1::before {
 }
 @layer component.middle {
   .c-header-main-menu__items {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    align-items: center;
     gap: clamp(1.5em, 3.3333333333vw, 3em);
   }
 }
 @layer layout.header {
   .l-header {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    align-items: center;
     height: var(--header-height);
   }
   .l-header__inner {
@@ -650,15 +617,9 @@ h1::before {
     margin-left: auto;
     margin-right: auto;
     width: calc(100% - var(--minmax) * 2);
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
+    align-items: center;
+    justify-content: space-between;
   }
   .l-header__logo {
     font-size: 2rem;
@@ -685,4 +646,4 @@ h1::before {
     -o-object-fit: cover;
        object-fit: cover;
   }
-}/*# sourceMappingURL=common.css.map */
+}

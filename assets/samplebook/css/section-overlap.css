@@ -25,8 +25,7 @@
 .js-sol-item {
   position: relative;
   background-color: #fafafa;
-  -webkit-transform: translate3d(0, var(--margin, 0), 0);
-          transform: translate3d(0, var(--margin, 0), 0);
+  transform: translate3d(0, var(--margin, 0), 0);
   width: 100%;
 }
 .js-sol-item img {
@@ -36,8 +35,7 @@
   background-color: #999;
 }
 .js-sol-item > * {
-  -webkit-transform: scale(calc(1 - var(--hide-progress, 0) * 0.05));
-          transform: scale(calc(1 - var(--hide-progress, 0) * 0.05));
+  transform: scale(calc(1 - var(--hide-progress, 0) * 0.05));
   opacity: calc(1 - var(--hide-progress, 0));
 }
 .js-sol-item::before {
@@ -127,4 +125,4 @@
   height: 500px;
   background-color: #333;
   z-index: 5;
-}/*# sourceMappingURL=section-overlap.css.map */
+}

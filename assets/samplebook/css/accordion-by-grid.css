@@ -1,0 +1,44 @@
+@charset "UTF-8";
+body {
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeSpeed;
+  font-feature-settings: "palt";
+  font-feature-settings: "pwid";
+  font-feature-settings: "pkna";
+  padding: 40px;
+}
+
+/* コア */
+.js-accordion-item.is-open .js-accordion-body {
+  grid-template-rows: 1fr;
+}
+.js-accordion-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s ease-in-out 0s;
+}
+.js-accordion-content {
+  overflow: hidden;
+}
+
+/* 装飾用 */
+.js-accordion-item {
+  padding-block: 24px;
+}
+.js-accordion-item + .js-accordion-item {
+  border-top: 1px solid #ccc;
+}
+.js-accordion-trigger {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  width: 100%;
+  text-align: left;
+}
+.js-accordion-content > *:first-child {
+  padding-top: 20px;
+}
